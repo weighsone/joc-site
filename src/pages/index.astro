@@ -1,0 +1,88 @@
+---
+// No server-side logic needed
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jono Oh Consulting - IT Strategy and Planning</title>
+  <meta name="description" content="IT Strategy and Planning: Aligning Business Goals with Technology" />
+  <link rel="stylesheet" href="/styles/global.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-logo">JOC</div>
+    <ul class="nav-links">
+      <li><a href="#" data-section="home">Home</a></li>
+      <li><a href="#" data-section="services">Services</a></li>
+      <li><a href="#" data-section="contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Section: Home -->
+  <section id="home" class="section active">
+    <div class="content">
+      <h1 class="fade-in">Jono Oh Consulting</h1>
+      <p class="tagline slide-in">IT Strategy and Planning: Aligning Business Goals with Technology</p>
+      <p class="subtitle slide-in-delay">and some break/fix if I like you</p>
+    </div>
+  </section>
+
+  <!-- Section: Services -->
+  <section id="services" class="section">
+    <div class="content">
+      <h2 class="fade-in">Services</h2>
+      <div class="services-grid">
+        <div class="service-card slide-in">
+          <h3>IT Strategy</h3>
+          <p>Aligning your technology roadmap with business objectives for sustainable growth.</p>
+        </div>
+        <div class="service-card slide-in-delay">
+          <h3>System Planning</h3>
+          <p>Designing robust, scalable systems that support your operational needs.</p>
+        </div>
+        <div class="service-card slide-in-delay-2">
+          <h3>Break/Fix Support</h3>
+          <p>Responsive troubleshooting and hands-on support when you need it most.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section: Contact -->
+  <section id="contact" class="section">
+    <div class="content">
+      <h2 class="fade-in">Get in Touch</h2>
+      <div class="contact-info slide-in">
+        <p><strong>Email:</strong> <a href="mailto:jono@joc.co.nz">jono@joc.co.nz</a></p>
+        <p><strong>Phone:</strong> <a href="tel:+64278416637">027 841 6637</a></p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Section navigation
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const sections = document.querySelectorAll('.section');
+
+    navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('data-section');
+        
+        // Remove active class from all sections
+        sections.forEach(section => section.classList.remove('active'));
+        
+        // Add active class to target section
+        const targetSection = document.getElementById(targetId);
+        if (targetSection) {
+          targetSection.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
