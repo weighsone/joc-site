@@ -48,7 +48,7 @@ a:hover {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem 3rem;
-  background: rgba(10, 10, 10, 0.9);
+  background: rgba(13, 13, 13, 0.9);
   backdrop-filter: blur(10px);
   z-index: 1000;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -112,6 +112,10 @@ a:hover {
   padding: 2rem;
 }
 
+.services-content {
+  max-width: 1100px;
+}
+
 /* ========== Typography ========== */
 h1 {
   font-size: 4rem;
@@ -123,12 +127,10 @@ h1 {
   background-clip: text;
 }
 
-
-
 h2 {
   font-size: 3rem;
   font-weight: 700;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   color: var(--color-accent);
 }
 
@@ -149,7 +151,7 @@ h3 {
 .subtitle {
   font-size: 1.125rem;
   font-style: italic;
-  color: rgba(224, 224, 224, 0.7);
+  color: rgba(232, 232, 232, 0.7);
 }
 
 /* ========== Services Grid ========== */
@@ -160,19 +162,29 @@ h3 {
   margin-top: 3rem;
 }
 
+.services-grid-4 {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .service-card {
   background: var(--color-card-bg);
-  padding: 2rem;
+  padding: 2.5rem 2rem;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .service-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 40px rgba(45, 122, 79, 0.25);
 }
-
 
 /* ========== Contact Info ========== */
 .contact-info {
@@ -249,7 +261,7 @@ h3 {
     font-size: 1.125rem;
   }
 
-  .services-grid {
+  .services-grid-4 {
     grid-template-columns: 1fr;
   }
 }
