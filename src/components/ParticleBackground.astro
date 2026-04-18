@@ -1,5 +1,5 @@
 ---
-// ParticleBackground.astro - Ambient particle background animation
+// ParticleBackground.astro - Ambient particle background animation with subtle mouse parallax
 ---
 
 <canvas id="particle-canvas" aria-hidden="true"></canvas>
@@ -16,6 +16,14 @@
       let particles = [];
       let animationId;
 
+      // Mouse parallax state
+      let mouseX = 0;
+      let mouseY = 0;
+      let targetOffsetX = 0;
+      let targetOffsetY = 0;
+      let currentOffsetX = 0;
+      let currentOffsetY = 0;
+
       // Configuration
       const CONFIG = {
         particleCount: 50,
@@ -28,6 +36,10 @@
         color: '#52b788',
         connectDistance: 120,
         lineOpacity: 0.15,
+        // Parallax settings
+        parallaxStrength: 15,      // Maximum pixel offset (increase for stronger effect, 10-30 recommended)
+        parallaxEasing: 0.05,      // Smoothing factor (0.05 = smooth, 0.1 = snappier)
+        parallaxDepthVariation: 0.6, // How much particle speed affects parallax (0-1, higher = more depth)
       };
 
       // Resize canvas to fill window
@@ -36,31 +48,67 @@
         canvas.height = window.innerHeight;
       }
 
+      // Mouse move handler with normalization
+      function handleMouseMove(e) {
+        // Normalize mouse position to -1 to +1 range (center = 0,0)
+        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseY = (e.clientY / window.innerHeight) * 2 - 1;
+
+        // Calculate target offset
+        targetOffsetX = mouseX * CONFIG.parallaxStrength;
+        targetOffsetY = mouseY * CONFIG.parallaxStrength;
+      }
+
+      // Update parallax offset with easing
+      function updateParallaxOffset() {
+        currentOffsetX += (targetOffsetX - currentOffsetX) * CONFIG.parallaxEasing;
+        currentOffsetY += (targetOffsetY - currentOffsetY) * CONFIG.parallaxEasing;
+      }
+
       // Particle class
       class Particle {
         constructor() {
+          this.baseX = 0;
+          this.baseY = 0;
           this.reset();
           this.x = Math.random() * canvas.width;
           this.y = Math.random() * canvas.height;
+          this.baseX = this.x;
+          this.baseY = this.y;
         }
 
         reset() {
           this.x = Math.random() * canvas.width;
           this.y = Math.random() * canvas.height;
+          this.baseX = this.x;
+          this.baseY = this.y;
           this.vx = (Math.random() - 0.5) * (CONFIG.maxSpeed - CONFIG.minSpeed) + CONFIG.minSpeed;
           this.vy = (Math.random() - 0.5) * (CONFIG.maxSpeed - CONFIG.minSpeed) + CONFIG.minSpeed;
           this.radius = Math.random() * (CONFIG.maxSize - CONFIG.minSize) + CONFIG.minSize;
           this.opacity = Math.random() * (CONFIG.maxOpacity - CONFIG.minOpacity) + CONFIG.minOpacity;
+          
+          // Calculate parallax depth based on particle speed
+          // Slower particles = less parallax (appear closer)
+          // Faster particles = more parallax (appear farther)
+          const speedMagnitude = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+          const normalizedSpeed = (speedMagnitude - CONFIG.minSpeed) / (CONFIG.maxSpeed - CONFIG.minSpeed);
+          this.parallaxDepth = 0.3 + (normalizedSpeed * CONFIG.parallaxDepthVariation);
         }
 
         update() {
-          this.x += this.vx;
-          this.y += this.vy;
+          // Update base position with velocity
+          this.baseX += this.vx;
+          this.baseY += this.vy;
 
-          if (this.x < -10) this.x = canvas.width + 10;
-          if (this.x > canvas.width + 10) this.x = -10;
-          if (this.y < -10) this.y = canvas.height + 10;
-          if (this.y > canvas.height + 10) this.y = -10;
+          // Wrap around screen edges
+          if (this.baseX < -10) this.baseX = canvas.width + 10;
+          if (this.baseX > canvas.width + 10) this.baseX = -10;
+          if (this.baseY < -10) this.baseY = canvas.height + 10;
+          if (this.baseY > canvas.height + 10) this.baseY = -10;
+
+          // Apply parallax offset based on particle depth
+          this.x = this.baseX + (currentOffsetX * this.parallaxDepth);
+          this.y = this.baseY + (currentOffsetY * this.parallaxDepth);
         }
 
         draw() {
@@ -101,6 +149,9 @@
       }
 
       function animate() {
+        // Update parallax offset with smooth easing
+        updateParallaxOffset();
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         particles.forEach(particle => {
@@ -120,6 +171,9 @@
         for (let i = 0; i < CONFIG.particleCount; i++) {
           particles.push(new Particle());
         }
+
+        // Add mouse move listener
+        window.addEventListener('mousemove', handleMouseMove, { passive: true });
 
         animate();
       }
@@ -141,6 +195,7 @@
         if (animationId) {
           cancelAnimationFrame(animationId);
         }
+        window.removeEventListener('mousemove', handleMouseMove);
       });
     }
   }
