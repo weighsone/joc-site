@@ -24,7 +24,7 @@
     maxSpeed: 0.3,            // Maximum drift speed (px per frame)
     minOpacity: 0.2,          // Minimum opacity (0-1)
     maxOpacity: 0.5,          // Maximum opacity (0-1)
-    color: '#00d4ff',         // Particle color (matches your accent)
+    color: '#52b788'',         // Particle color (matches your accent)
     connectDistance: 120,     // Distance to draw connecting lines (0 = none)
     lineOpacity: 0.15,        // Opacity of connecting lines
   };
